@@ -1,0 +1,1 @@
+这个是用于spring el表达式测试的文本文件,存放在resources目录下。
