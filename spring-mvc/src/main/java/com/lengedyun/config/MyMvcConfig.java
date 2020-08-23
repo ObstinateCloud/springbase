@@ -1,9 +1,10 @@
 package com.lengedyun.config;
 
+import com.lengedyun.interceptor.DemoInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -18,7 +19,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.lengedyun")
-public class MyMvcConfig {
+public class MyMvcConfig implements WebMvcConfigurer {
 
     @Bean
     public InternalResourceViewResolver viewResolver(){
@@ -27,5 +28,22 @@ public class MyMvcConfig {
         resolver.setSuffix(".jsp");
         resolver.setViewClass(JstlView.class);
         return resolver;
+    }
+
+    //静态资源映射
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/assets/**")//对外暴露的访问路径
+                .addResourceLocations("classpath:/assets/");
+    }
+
+    @Bean
+    public DemoInterceptor demoInterceptor(){
+        return new DemoInterceptor();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(demoInterceptor());
     }
 }
