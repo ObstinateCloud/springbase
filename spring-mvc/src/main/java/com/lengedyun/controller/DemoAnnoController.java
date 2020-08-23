@@ -32,6 +32,18 @@ public class DemoAnnoController {
         return "url:"+request.getRequestURI()+" can access,str="+str;
     }
 
+    /**
+     * 请求路径中带.号
+     * @param str
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="/pathvar/xx.yy/{str}",produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String demoPathVarSpecial(@PathVariable String str,HttpServletRequest request){
+        return "url:"+request.getRequestURI()+" can access,str="+str;
+    }
+
     @RequestMapping(value = "requestParam",produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public String passRequestParam(Long id,HttpServletRequest request){
