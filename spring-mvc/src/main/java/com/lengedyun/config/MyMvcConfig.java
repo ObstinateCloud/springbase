@@ -1,14 +1,21 @@
 package com.lengedyun.config;
 
+import com.lengedyun.converter.MyMessageConverter;
 import com.lengedyun.interceptor.DemoInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zjy
@@ -37,6 +44,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/assets/**")//对外暴露的访问路径
                 .addResourceLocations("classpath:/assets/");
+
     }
 
     @Bean
@@ -56,6 +64,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/index").setViewName("/index");
         registry.addViewController("/toUpload").setViewName("/upload");
+        registry.addViewController("/toConverter").setViewName("/converter");
     }
 
     /**
@@ -74,5 +83,31 @@ public class MyMvcConfig implements WebMvcConfigurer {
         resolver.setDefaultEncoding("UTF-8");
         return resolver;
     }
+
+    //覆盖原有
+//    @Override
+//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//
+//    }
+
+    //仅新注册，不覆盖原有
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        MyMessageConverter messageConverter = converter();
+//        messageConverter.setSupportedMediaTypes(getSupportMediaTypes());
+        converters.add(messageConverter);
+    }
+
+    @Bean
+    public MyMessageConverter converter(){
+        return new MyMessageConverter();
+    }
+
+    private List<MediaType> getSupportMediaTypes(){
+        List<MediaType> supportedMediaTypes = new ArrayList<>();
+        supportedMediaTypes.add(new MediaType("application","x-wisely"));
+        return supportedMediaTypes;
+    }
+
 
 }
