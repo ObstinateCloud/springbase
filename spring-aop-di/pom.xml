@@ -16,7 +16,7 @@
     <url>http://www.example.com</url>
 
     <properties>
-        <spring.version>5.0.12.RELEASE</spring.version>
+        <spring.version>5.3.19</spring.version>
         <aspectj.version>1.9.5</aspectj.version>
     </properties>
 
